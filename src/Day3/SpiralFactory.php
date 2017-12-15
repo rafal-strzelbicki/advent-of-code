@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Advent\Day3;
 
 use Advent\Day3\CoordinateSystem\SpiralCoordinateSystem;
+use Advent\Day3\Spiral\IncrementalSpiral;
+use Advent\Day3\Spiral\NeighbourhoodBasedSpiral;
 
 class SpiralFactory
 {
@@ -13,10 +15,18 @@ class SpiralFactory
         $this->coordinateSystem = $coordinateSystem;
     }
 
-    public function buildSpiral($numberOfElements): Spiral
+    public function buildIncrementalSpiral(int $numberOfElements): Spiral
     {
-        $spiral = new Spiral($this->coordinateSystem);
+        return $this->buildSpiral(new IncrementalSpiral($this->coordinateSystem), $numberOfElements);
+    }
 
+    public function buildNeighbourhoodBasedSpiral(int $numberOfElements): Spiral
+    {
+        return $this->buildSpiral(new NeighbourhoodBasedSpiral($this->coordinateSystem), $numberOfElements);
+    }
+
+    private function buildSpiral(Spiral $spiral, int $numberOfElements): Spiral
+    {
         while (--$numberOfElements) {
             $spiral->addElement();
         }

@@ -2,59 +2,41 @@
 declare(strict_types=1);
 namespace Advent\Day3;
 
+use Advent\Day3\CoordinateSystem\Coordinates;
+use Advent\Day3\CoordinateSystem\SpiralCoordinateSystem;
+
 class Spiral
 {
-    private $index = [];
+    private $coordinateSystem;
+    private $elements = [];
 
-    public function __construct(int $limit)
+    public function __construct(SpiralCoordinateSystem $coordinateSystem)
     {
-        $this->initialize($limit);
+        $this->coordinateSystem = $coordinateSystem;
+        $this->elements[] = $this->coordinateSystem->origin();
     }
 
-    public function getCoordinatesByNumber(int $number): Coordinates
+    public function addElement(): void
     {
-        if (false === isset($this->index[$number - 1])) {
-            throw new \InvalidArgumentException('Given number does not exist in spiral');
-        }
-
-        return $this->index[$number - 1];
+        $this->elements[] = $this->coordinateSystem->nextCoordinates(end($this->elements));
     }
 
-    public function getNumberByCoordinates(Coordinates $coordinates): int
+    public function getElementCoordinates($element): Coordinates
     {
-        if ($key = array_search($coordinates, $this->index)) {
-            return $key + 1;
+        if (false === isset($this->elements[$element - 1])) {
+            throw new \InvalidArgumentException('Given element does not exist in spiral');
         }
 
-        throw new \InvalidArgumentException('Given coordinates do not exist in spiral');
+        return $this->elements[$element - 1];
     }
 
-    protected function initialize($limit): void
+    public function getLastElement(): int
     {
-        $x = 0;
-        $y = 0;
+        return \count($this->elements);
+    }
 
-        //ain't nobody got time for refactor
-        while ($limit --) {
-            if ($x === 0 && $y === 0) {
-                $this->index[] = new Coordinates($x++, $y);
-            } elseif ($x > abs($y)) {
-                $this->index[] = new Coordinates($x, $y++);
-            } elseif ($y > abs($x)) {
-                $this->index[] = new Coordinates($x--, $y);
-            } elseif ($x === $y && $x > 0) {
-                $this->index[] = new Coordinates($x--, $y);
-            } elseif (-1 * $x === $y && $x < 0) {
-                $this->index[] = new Coordinates($x, $y--);
-            } elseif ($x === $y && $x < 0) {
-                $this->index[] = new Coordinates($x++, $y);
-            } elseif ($x === -1 * $y) {
-                $this->index[] = new Coordinates($x++, $y);
-            } elseif ($x < $y) {
-                $this->index[] = new Coordinates($x, $y--);
-            } elseif ($y < 0 && $x > $y) {
-                $this->index[] = new Coordinates($x++, $y);
-            }
-        }
+    public function getLastElementCoordinates(): Coordinates
+    {
+        return end($this->elements);
     }
 }

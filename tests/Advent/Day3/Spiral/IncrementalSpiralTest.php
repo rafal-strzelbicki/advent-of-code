@@ -1,17 +1,17 @@
 <?php
-namespace Advent\Day3;
+namespace Advent\Day3\Spiral;
 
 use Advent\Day3\CoordinateSystem\Coordinates;
 use Advent\Day3\CoordinateSystem\SpiralCoordinateSystem;
 use PHPUnit\Framework\TestCase;
 
-class SpiralTest extends TestCase
+class IncrementalSpiralTest extends TestCase
 {
     public function testItStartsFromOne()
     {
         $this->assertEquals(
             1,
-            (new Spiral(new SpiralCoordinateSystem()))->getLastElement()
+            (new IncrementalSpiral(new SpiralCoordinateSystem()))->getLastElement()
         );
     }
 
@@ -19,13 +19,13 @@ class SpiralTest extends TestCase
     {
         $this->assertEquals(
             new Coordinates(0, 0),
-            (new Spiral(new SpiralCoordinateSystem()))->getCoordinatesOfLastElement()
+            (new IncrementalSpiral(new SpiralCoordinateSystem()))->getCoordinatesOfLastElement()
         );
     }
 
      public function testItAllowAddingNextElement()
      {
-         $spiral = new Spiral(new SpiralCoordinateSystem());
+         $spiral = new IncrementalSpiral(new SpiralCoordinateSystem());
          $spiral->addElement();
 
          $this->assertEquals(
@@ -38,7 +38,7 @@ class SpiralTest extends TestCase
     {
         $this->assertEquals(
             new Coordinates(0, 0),
-            (new Spiral(new SpiralCoordinateSystem()))->getCoordinatesOfElement(1)
+            (new IncrementalSpiral(new SpiralCoordinateSystem()))->getCoordinatesOfElement(1)
         );
     }
 
@@ -47,6 +47,6 @@ class SpiralTest extends TestCase
         $this->expectExceptionMessage('Given element does not exist in spiral');
         $this->expectException(\InvalidArgumentException::class);
 
-        (new Spiral(new SpiralCoordinateSystem()))->getCoordinatesOfElement(100);
+        (new IncrementalSpiral(new SpiralCoordinateSystem()))->getCoordinatesOfElement(100);
     }
 }

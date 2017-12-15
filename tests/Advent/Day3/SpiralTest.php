@@ -19,7 +19,7 @@ class SpiralTest extends TestCase
     {
         $this->assertEquals(
             new Coordinates(0, 0),
-            (new Spiral(new SpiralCoordinateSystem()))->getLastElementCoordinates()
+            (new Spiral(new SpiralCoordinateSystem()))->getCoordinatesOfLastElement()
         );
     }
 
@@ -38,7 +38,7 @@ class SpiralTest extends TestCase
     {
         $this->assertEquals(
             new Coordinates(0, 0),
-            (new Spiral(new SpiralCoordinateSystem()))->getElementCoordinates(1)
+            (new Spiral(new SpiralCoordinateSystem()))->getCoordinatesOfElement(1)
         );
     }
 
@@ -47,6 +47,6 @@ class SpiralTest extends TestCase
         $this->expectExceptionMessage('Given element does not exist in spiral');
         $this->expectException(\InvalidArgumentException::class);
 
-        (new Spiral(new SpiralCoordinateSystem()))->getElementCoordinates(100);
+        (new Spiral(new SpiralCoordinateSystem()))->getCoordinatesOfElement(100);
     }
 }

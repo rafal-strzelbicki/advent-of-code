@@ -21,7 +21,12 @@ class Spiral
         $this->elements[] = $this->coordinateSystem->nextCoordinates(end($this->elements));
     }
 
-    public function getElementCoordinates($element): Coordinates
+    public function getLastElement(): int
+    {
+        return \count($this->elements);
+    }
+
+    public function getCoordinatesOfElement($element): Coordinates
     {
         if (false === isset($this->elements[$element - 1])) {
             throw new \InvalidArgumentException('Given element does not exist in spiral');
@@ -30,12 +35,7 @@ class Spiral
         return $this->elements[$element - 1];
     }
 
-    public function getLastElement(): int
-    {
-        return \count($this->elements);
-    }
-
-    public function getLastElementCoordinates(): Coordinates
+    public function getCoordinatesOfLastElement(): Coordinates
     {
         return end($this->elements);
     }

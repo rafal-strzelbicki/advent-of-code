@@ -4,51 +4,48 @@ namespace Advent\Day5;
 
 class Process
 {
+    private $executedInstructions;
     private $instructionsList;
 
     public function __construct(InstructionsList $instructionsList)
     {
+        if ($instructionsList->isEmpty()) {
+            throw new \InvalidArgumentException('Process must have at least one instruction');
+        }
+
+        $this->executedInstructions = 0;
         $this->instructionsList = $instructionsList;
     }
 
-    public function start(): int
+    public function awaitingInstruction(): Instruction
     {
-        $steps = 0;
+        if (false === $this->instructionsList->current()) {
+            throw new \RuntimeException('There are no more instructions left');
+        }
 
-        while (true) {
-            if (false === $this->instructionsList->current()) {
-                return $steps;
+        return $this->instructionsList->current();
+    }
+
+    public function executeAwaitingInstruction(): void
+    {
+        $value = $this->awaitingInstruction()->getValue();
+        $this->awaitingInstruction()->increment();
+        $this->executedInstructions++;
+
+        if ($value >= 0) {
+            while ($value --) {
+                $this->instructionsList->next();
             }
-
-            $value = $this->instructionsList->current()->getValue();
-
-            if ($value >= 3) {
-                $this->instructionsList->current()->decrement();
-            } else {
-                $this->instructionsList->current()->increment();
+        } else {
+            $value = abs($value);
+            while ($value--) {
+                $this->instructionsList->prev();
             }
-
-            if ($value >= 0) {
-                $this->jumpForward($value);
-            } else {
-                $this->jumpBackward(abs($value));
-            }
-
-            $steps++;
         }
     }
 
-    private function jumpForward($steps): void
+    public function numberOfExecutedInstructions(): int
     {
-        for ($i = 0; $i < $steps; $i++) {
-            $this->instructionsList->next();
-        }
-    }
-
-    private function jumpBackward($steps): void
-    {
-        for ($i = 0; $i < $steps; $i++) {
-            $this->instructionsList->prev();
-        }
+        return $this->executedInstructions;
     }
 }
